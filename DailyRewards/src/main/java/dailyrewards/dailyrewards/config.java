@@ -24,8 +24,8 @@ public class config implements Listener {
     PCとしてのカレンダーなので信用できる
      */
     Calendar cal = Calendar.getInstance();
-    Integer 今日 = cal.get(Calendar.DAY_OF_MONTH);
-    Integer 今月 = cal.get(Calendar.MONTH) + 1;
+    Integer ddd = cal.get(Calendar.DAY_OF_MONTH);
+    Integer mmm = cal.get(Calendar.MONTH) + 1;
     /*
     ハッシュマップここでconfigの登録をして鯖の負荷を減らす
     後プレイヤーの取得も追加する
@@ -43,18 +43,18 @@ public class config implements Listener {
     それでその人がその日に既に取得してるかなどを確認する
      */
     public void usecmd(Player p) {
-        String 月日 = 今月 + "月" + 今日 + "日";
+        String dm = ddd + "月" + mmm + "日";
         if (cooldown.containsKey(p)) {
-            if (cooldown.get(p).equalsIgnoreCase(月日)) {
+            if (cooldown.get(p).equalsIgnoreCase(dm)) {
                 p.sendMessage(cc.get("bonus.already").replace("&", "§").replace("%prefix%", cc.get("prefix").replace("&", "§")));
                 return;
             } else {
-                cooldown.put(p, 月日);
+                cooldown.put(p, dm);
                 reward(p);
                 return;
             }
         }
-        cooldown.put(p, 月日);
+        cooldown.put(p, dm);
         reward(p);
     }
 
@@ -62,7 +62,7 @@ public class config implements Listener {
     報酬が２個に分かれるとぐちゃぐちゃになるので１個にまとめた
      */
     public void reward(Player p) {
-        String 月日 = 今月 + "月" + 今日 + "日";
+        String dm = mmm + "月" + ddd + "日";
         p.sendMessage(cc.get("bonus.get").replace("&", "§").replace("%prefix%", cc.get("prefix").replace("&", "§")));
         List<String> list = cmds.get("cmds");
         if (cc.containsKey("bonus.sound")) {
@@ -81,10 +81,10 @@ public class config implements Listener {
      */
     public void DownServer(Player p) {
         if (cooldown.containsKey(p)) {
-            String 月日 = 今月 + "月" + 今日 + "日";
+            String dm = ddd + "月" + mmm + "日";
             File file = new File("plugins/AziReward/data.yml");
             FileConfiguration data = YamlConfiguration.loadConfiguration(file);
-            data.set("data." + p.getUniqueId(), 月日);
+            data.set("data." + p.getUniqueId(), dm);
             try {
                 data.save(file);
             } catch (IOException e) {
@@ -103,9 +103,9 @@ public class config implements Listener {
         Player p = e.getPlayer();
         File file = new File("plugins/AziReward/data.yml");
         FileConfiguration data = YamlConfiguration.loadConfiguration(file);
-        String 月日 = 今月 + "月" + 今日 + "日";
+        String dm = ddd + "月" + mmm + "日";
         if (data.contains("data."+p.getUniqueId())) {
-            cooldown.put(p, 月日);
+            cooldown.put(p, dm);
         }
     }
 
