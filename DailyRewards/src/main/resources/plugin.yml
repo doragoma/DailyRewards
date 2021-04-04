@@ -1,0 +1,9 @@
+name: DailyRewards
+version: ${project.version}
+main: dailyrewards.dailyrewards.DailyRewards
+
+commands:
+  reward:
+    usage: /reward
+  reset:
+    usage: /reset
